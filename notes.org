@@ -1,3 +1,33 @@
+* Notes
+Here are the commands I used to set this lab up:
+#+begin_src bash
+bundle install
+rails db:migrate db:seed
+#+end_src
+
+I revised the 'config/routes.rb' routes file with the following contents:
+#+begin_src ruby
+Rails.application.routes.draw do
+  resources :birds
+  patch "/birds/:id/like", to: "birds#increment_likes"
+end
+#+end_src
+
+I then checked the available routes with the 'rails routes' command:
+#+begin_src ruby
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-4/phase-4-rails-resources-destroy $ rails routes
+Prefix Verb   URI Pattern               Controller#Action
+ birds GET    /birds(.:format)          birds#index
+       POST   /birds(.:format)          birds#create
+  bird GET    /birds/:id(.:format)      birds#show
+       PATCH  /birds/:id(.:format)      birds#update
+       PUT    /birds/:id(.:format)      birds#update
+       DELETE /birds/:id(.:format)      birds#destroy
+       PATCH  /birds/:id/like(.:format) birds#increment_likes
+#+end_src
+
+I added a 'destroy' action to the existing 'app/controllers/birds_controller.rb' controllers file:
+#+begin_src ruby
 class BirdsController < ApplicationController
 
   # GET /birds
@@ -46,7 +76,7 @@ class BirdsController < ApplicationController
 
   def destroy
     bird = Bird.find_by(id: params[:id])
-    if bird 
+    if bird
       bird.destroy()
       head :no_content
     else
@@ -61,3 +91,4 @@ class BirdsController < ApplicationController
   end
 
 end
+#+end_src
